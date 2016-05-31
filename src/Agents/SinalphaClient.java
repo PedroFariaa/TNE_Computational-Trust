@@ -16,13 +16,16 @@ import jade.proto.ContractNetInitiator;;
 public class SinalphaClient extends Client {
 
 	public void setup() {
+		
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
+		
 	}
 
 	class FIPAContractNetInit extends ContractNetInitiator {
 
 		public FIPAContractNetInit(Agent a, ACLMessage msg) {
 			super(a, msg);
+			//prepareCfps(msg);
 		}
 
 		protected Vector prepareCfps(ACLMessage cfp) {
@@ -41,7 +44,7 @@ public class SinalphaClient extends Client {
 		}
 
 		private String cfpContent(String message) {
-			Random rand = null;
+			Random rand = new Random();
 			int r = rand.nextInt(3);
 			message = message + product.get(r);
 			r = rand.nextInt(3);
@@ -54,7 +57,7 @@ public class SinalphaClient extends Client {
 			return message;
 		}
 
-		//ver documentação
+		//ver documentaÃ§Ã£o
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			System.out.println("got " + responses.size() + " responses!");
 

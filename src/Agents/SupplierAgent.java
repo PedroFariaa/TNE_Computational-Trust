@@ -27,12 +27,12 @@ public class SupplierAgent extends Agent{
 	
 	
 	public void setup() {
-		generateSupplierHandicaps();		
+		generateSupplierHandicaps();	
 		addBehaviour(new FIPAContractNetResp(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 	}
 	
 	private void generateSupplierHandicaps() {
-		Random rand = null;
+		Random rand = new Random();
 		int handicap_number = rand.nextInt(2);
 		for(int i=0; i<handicap_number; i++){
 			int handicap_type = rand.nextInt(4);
