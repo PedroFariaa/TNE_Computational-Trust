@@ -15,9 +15,17 @@ import jade.proto.ContractNetInitiator;;
 
 public class SinalphaClient extends Client {
 
+	public Double min_accept_trust = 0.7;
+	
 	public void setup() {
 		
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
+		
+	}
+	
+	public SinalphaClient(Double _min_accept_trust) {
+		
+		min_accept_trust = _min_accept_trust;
 		
 	}
 
@@ -31,7 +39,7 @@ public class SinalphaClient extends Client {
 		protected Vector prepareCfps(ACLMessage cfp) {
 			Vector v = new Vector();
 			cfp.addReceiver(new AID("supplier1", false));
-			String message = "Hello";
+			String message = "";
 
 			cfpContent(message);
 			cfp.setContent(message);
@@ -67,7 +75,11 @@ public class SinalphaClient extends Client {
 				
 				System.out.println(((ACLMessage)responses.get(i)).getContent());
 				
-				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL); // OR NOT!
+				if(true) //change for received trust >= min_accept_trust
+					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+				else
+					msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
+				
 				acceptances.add(msg);
 			}
 		}
