@@ -1,5 +1,10 @@
 package Agents;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -12,15 +17,30 @@ public class SupplierAgent extends Agent{
 	double lambda_Fd = -0.1;
 	double lambda_V = -1.5;
 	
+	List<String> product = Arrays.asList("cotton", "chiffon", "voile");
+	List<String> quantity = Arrays.asList("small", "medium", "large");
+	List<String> quality = Arrays.asList("low", "medium", "high");
+	List<String> delivery = Arrays.asList("short", "standard", "long");
 	
-	public SupplierAgent(){
-		
-	}
+	ArrayList<String> handicap = new ArrayList<>();
+	List<List<String>> handicap_string = Arrays.asList(product, quantity, quality, delivery);
+	
 	
 	public void setup() {
+		generateSupplierHandicaps();		
 		addBehaviour(new FIPAContractNetResp(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 	}
 	
+	private void generateSupplierHandicaps() {
+		Random rand = null;
+		int handicap_number = rand.nextInt(2);
+		for(int i=0; i<handicap_number; i++){
+			int handicap_type = rand.nextInt(4);
+			int handicap_param = rand.nextInt(3);
+			handicap.add(handicap_string.get(handicap_type).get(handicap_param));
+		}
+	}
+
 	class FIPAContractNetResp extends ContractNetResponder {
 		
 		double trust = 0;
@@ -47,6 +67,7 @@ public class SupplierAgent extends Agent{
 			System.out.println(myAgent.getLocalName() + " got an accept!");
 			
 			//decidir envio F, Fd ou V
+			
 			
 			//atualiza valor de trust - SINALPHA
 			trust = trust + lambda_F * w;

@@ -1,22 +1,14 @@
 package Agents;
 
+import java.util.Arrays;
+import java.util.List;
 
-public class Client {
-	public enum Product {
-	    COTTON, CHIFFON, VOILE 
-	}
+import jade.core.Agent;
 
-	public enum Quantity {
-	    SMALL, MEDIUM, LARGE 
-	}
-
-	public enum Quality {
-	    LOW, MEDIUM, HIGH
-	}
-
-	public enum DeliveryTime {
-	    SHORT, STANDARD, LONG 
-	}
-	
+public class Client extends Agent {
+	public List<String> product = Arrays.asList("cotton", "chiffon", "voile");
+	public List<String> quantity = Arrays.asList("small", "medium", "large");
+	public List<String> quality = Arrays.asList("low", "medium", "high");
+	public List<String> delivery = Arrays.asList("short", "standard", "long");
 	
 }
