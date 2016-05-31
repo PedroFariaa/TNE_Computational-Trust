@@ -10,12 +10,12 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetResponder;
 
-public class SupplierAgent extends Agent{
+public class SupplierAgent extends Agent {
 	
-	double w = Math.PI/6;
-	double lambda_F = 1.0;
-	double lambda_Fd = -0.1;
-	double lambda_V = -1.5;
+	Double w = Math.PI/6;
+	Double lambda_F = 1.0;
+	Double lambda_Fd = -0.1;
+	Double lambda_V = -1.5;
 	
 	List<String> product = Arrays.asList("cotton", "chiffon", "voile");
 	List<String> quantity = Arrays.asList("small", "medium", "large");
@@ -33,17 +33,19 @@ public class SupplierAgent extends Agent{
 	
 	private void generateSupplierHandicaps() {
 		Random rand = new Random();
-		int handicap_number = rand.nextInt(2);
-		for(int i=0; i<handicap_number; i++){
-			int handicap_type = rand.nextInt(4);
-			int handicap_param = rand.nextInt(3);
+		Integer handicap_number = rand.nextInt(2);
+		
+		for(Integer i = 0; i < handicap_number; i++){
+			Integer handicap_type = rand.nextInt(4);
+			Integer handicap_param = rand.nextInt(3);
+			
 			handicap.add(handicap_string.get(handicap_type).get(handicap_param));
 		}
 	}
 	
 	class FIPAContractNetResp extends ContractNetResponder {
 		
-		double trust = 0;
+		Double trust = 0.0;
 
 		public FIPAContractNetResp(Agent a, MessageTemplate mt) {
 			super(a, mt);
@@ -71,14 +73,16 @@ public class SupplierAgent extends Agent{
 		protected ACLMessage handleCfp(ACLMessage cfp) {
 			ACLMessage reply = cfp.createReply();
 			reply.setPerformative(ACLMessage.PROPOSE);
-			reply.setContent("");
+			reply.setContent("" + trust);
 			// ...
 			System.out.println("sent trust to agent");
 			return reply;
 		}
 		
 		protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
-			System.out.println(myAgent.getLocalName() + " got a reject...");
+			
+			System.out.println("[" + myAgent.getLocalName() + "]: Received a reject from " + cfp.getSender().getLocalName());
+			
 		}
 
 		protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {

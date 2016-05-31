@@ -19,13 +19,11 @@ public class SinalphaClient extends Client {
 	
 	public void setup() {
 		
+		Object [] args = getArguments();
+		
+		min_accept_trust = Double.parseDouble((String)args[0]);
+		
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
-		
-	}
-	
-	public SinalphaClient(Double _min_accept_trust) {
-		
-		min_accept_trust = _min_accept_trust;
 		
 	}
 
@@ -33,7 +31,6 @@ public class SinalphaClient extends Client {
 
 		public FIPAContractNetInit(Agent a, ACLMessage msg) {
 			super(a, msg);
-			//prepareCfps(msg);
 		}
 
 		protected Vector prepareCfps(ACLMessage cfp) {
@@ -53,7 +50,7 @@ public class SinalphaClient extends Client {
 
 		private String cfpContent(String message) {
 			Random rand = new Random();
-			int r = rand.nextInt(3);
+			Integer r = rand.nextInt(3);
 			message = message + product.get(r);
 			r = rand.nextInt(3);
 			message = message + ", " + quantity.get(r);
@@ -67,15 +64,19 @@ public class SinalphaClient extends Client {
 
 		//ver documentação
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
-			System.out.println("got " + responses.size() + " responses!");
 			
-
-			for (int i = 0; i < responses.size(); i++) {
-				ACLMessage msg = ((ACLMessage) responses.get(i)).createReply();
+			System.out.println("[" + getAID().getLocalName() + "]: Got " + responses.size() + " responses!");
+			
+			for (Integer i = 0; i < responses.size(); i++) {
 				
-				System.out.println(((ACLMessage)responses.get(i)).getContent());
+				ACLMessage response = (ACLMessage)responses.get(i);
+				ACLMessage msg = response.createReply();
 				
-				if(true) //change for received trust >= min_accept_trust
+				Double trust = Double.parseDouble(response.getContent());
+				
+				System.out.println("[" + getAID().getLocalName() + "]: Received message from " + response.getSender().getLocalName());
+				
+				if(trust >= min_accept_trust)
 					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 				else
 					msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
