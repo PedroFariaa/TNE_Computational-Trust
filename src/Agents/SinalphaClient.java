@@ -31,7 +31,7 @@ public class SinalphaClient extends Client {
 		protected Vector prepareCfps(ACLMessage cfp) {
 			Vector v = new Vector();
 			cfp.addReceiver(new AID("supplier1", false));
-			String message = "";
+			String message = "Hello";
 
 			cfpContent(message);
 			cfp.setContent(message);
@@ -48,11 +48,11 @@ public class SinalphaClient extends Client {
 			int r = rand.nextInt(3);
 			message = message + product.get(r);
 			r = rand.nextInt(3);
-			message = message + quantity.get(r);
+			message = message + ", " + quantity.get(r);
 			r = rand.nextInt(3);
-			message = message + quality.get(r);
+			message = message + ", " + quality.get(r);
 			r = rand.nextInt(3);
-			message = message + delivery.get(r);
+			message = message + ", " + delivery.get(r);
 
 			return message;
 		}
@@ -60,9 +60,13 @@ public class SinalphaClient extends Client {
 		//ver documentação
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			System.out.println("got " + responses.size() + " responses!");
+			
 
 			for (int i = 0; i < responses.size(); i++) {
 				ACLMessage msg = ((ACLMessage) responses.get(i)).createReply();
+				
+				System.out.println(((ACLMessage)responses.get(i)).getContent());
+				
 				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL); // OR NOT!
 				acceptances.add(msg);
 			}

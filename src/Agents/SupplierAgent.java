@@ -40,7 +40,7 @@ public class SupplierAgent extends Agent{
 			handicap.add(handicap_string.get(handicap_type).get(handicap_param));
 		}
 	}
-
+	
 	class FIPAContractNetResp extends ContractNetResponder {
 		
 		double trust = 0;
@@ -50,10 +50,28 @@ public class SupplierAgent extends Agent{
 		}
 		
 		
+		/**
+		 * Checks if the message contains any handicap of the supplier.
+		 * Assumed Message: <product>, <quantity>, <quality>, <delivery>
+		 * @param msg - ACLMessage to be checked.
+		 * @return Returns true if the message contains any handicap of the supplier, and false otherwise.
+		 */
+		protected boolean checkHandicap(ACLMessage msg) {
+			
+			String [] msg_params = msg.getContent().split(", ");
+			
+			for(String param : msg_params)
+				if(handicap.contains(param))
+					return true;
+				
+			return false;
+			
+		}
+		
 		protected ACLMessage handleCfp(ACLMessage cfp) {
 			ACLMessage reply = cfp.createReply();
 			reply.setPerformative(ACLMessage.PROPOSE);
-			reply.setContent(""+trust);
+			reply.setContent("");
 			// ...
 			System.out.println("sent trust to agent");
 			return reply;
