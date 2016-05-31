@@ -25,32 +25,49 @@ public class SupplierAgent extends Agent {
 	ArrayList<String> handicap = new ArrayList<>();
 	List<List<String>> handicap_string = Arrays.asList(product, quantity, quality, delivery);
 	
-	
+	/**
+	 * Setup method. Starts by generating the supplier handicaps and then adds a FIPAContractNetResp behaviour.
+	 */
 	public void setup() {
+		
 		generateSupplierHandicaps();	
 		addBehaviour(new FIPAContractNetResp(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
+		
 	}
 	
+	/**
+	 * Generates the supplier handicaps (randomized type and respective parameter).
+	 */
 	private void generateSupplierHandicaps() {
+		
 		Random rand = new Random();
 		Integer handicap_number = rand.nextInt(2);
 		
 		for(Integer i = 0; i < handicap_number; i++){
+			
 			Integer handicap_type = rand.nextInt(4);
 			Integer handicap_param = rand.nextInt(3);
 			
 			handicap.add(handicap_string.get(handicap_type).get(handicap_param));
+			
 		}
+		
 	}
 	
 	class FIPAContractNetResp extends ContractNetResponder {
 		
 		Double trust = 0.0;
 
+		/**
+		 * Class constructor with two parameters.
+		 * @param a - Agent.
+		 * @param mt - Message Template.
+		 */
 		public FIPAContractNetResp(Agent a, MessageTemplate mt) {
+			
 			super(a, mt);
+			
 		}
-		
 		
 		/**
 		 * Checks if the message contains any handicap of the supplier.
@@ -70,22 +87,48 @@ public class SupplierAgent extends Agent {
 			
 		}
 		
+		/**
+		 * Handle the call for proposal and return the reply.
+		 * @param cfp - Call for proposal
+		 * @return Returns the reply to the sender of the call for proposal.
+		 */
 		protected ACLMessage handleCfp(ACLMessage cfp) {
+			
+			boolean hasHandicap = checkHandicap(cfp);
+			
+			if(hasHandicap)
+				System.out.println("[" + myAgent.getLocalName() + "]: " + "Found handicap from " + cfp.getSender().getLocalName());
+			
 			ACLMessage reply = cfp.createReply();
 			reply.setPerformative(ACLMessage.PROPOSE);
 			reply.setContent("" + trust);
-			// ...
-			System.out.println("sent trust to agent");
+
+			System.out.println("[" + myAgent.getLocalName() + "]: " + "Sending trust to " + cfp.getSender().getLocalName());
+			
 			return reply;
+			
 		}
 		
+		/**
+		 * Handles the reject proposal.
+		 * @param cfp - Call for proposal.
+		 * @param propose - Propose message.
+		 * @param reject - Reject message.
+		 */
 		protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
 			
 			System.out.println("[" + myAgent.getLocalName() + "]: Received a reject from " + cfp.getSender().getLocalName());
 			
 		}
 
+		/**
+		 * Returns the reply to the accept proposal.
+		 * @param cfp - Call for proposal.
+		 * @param propose - Proposal message.
+		 * @param accept - Accept message.
+		 */
 		protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {
+			
 			System.out.println(myAgent.getLocalName() + " got an accept!");
 			
 			//decidir envio F, Fd ou V
@@ -101,6 +144,7 @@ public class SupplierAgent extends Agent {
 			result.setContent("this is the result");
 			
 			return result;
+			
 		}
 
 	}

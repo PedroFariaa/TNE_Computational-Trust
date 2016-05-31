@@ -17,6 +17,9 @@ public class SinalphaClient extends Client {
 
 	public Double min_accept_trust = Constants.MIN_ACCEPT_TRUST;
 	
+	/**
+	 * Setup method. Starts by reading the arguments and then adds a FIPAContractNetInit behaviour.
+	 */
 	public void setup() {
 		
 		Object [] args = getArguments();
@@ -29,28 +32,49 @@ public class SinalphaClient extends Client {
 
 	class FIPAContractNetInit extends ContractNetInitiator {
 
+		/**
+		 * Class constructor with two parameters.
+		 * @param a - Agent.
+		 * @param msg - Message.
+		 */
 		public FIPAContractNetInit(Agent a, ACLMessage msg) {
+			
 			super(a, msg);
+			
 		}
 
+		/**
+		 * Prepares the call for proposals.
+		 * @param cfp - Call for proposal.
+		 * @return Returns the vector with all the call for proposals to be sent.
+		 */
 		protected Vector prepareCfps(ACLMessage cfp) {
+			
 			Vector v = new Vector();
 			cfp.addReceiver(new AID("supplier1", false));
-			String message = "";
-
-			cfpContent(message);
+			
+			String message = cfpContent();
 			cfp.setContent(message);
 
-			System.out.println("sent a cfp");
+			System.out.println("[" + myAgent.getLocalName() + "]: " + "Sending CFP to supplier 1");
 
 			v.add(cfp);
 
 			return v;
+			
 		}
 
-		private String cfpContent(String message) {
+		/**
+		 * Generates the call for proposal content to be sent.
+		 * @return Returns the message to be sent on the call for proposal.
+		 */
+		private String cfpContent() {
+			
+			String message = "";
+			
 			Random rand = new Random();
 			Integer r = rand.nextInt(3);
+			
 			message = message + product.get(r);
 			r = rand.nextInt(3);
 			message = message + ", " + quantity.get(r);
@@ -62,10 +86,12 @@ public class SinalphaClient extends Client {
 			return message;
 		}
 
-		//ver documentação
+		/**
+		 * Handles all the responses and then adds the acceptances to the respective vector.
+		 */
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			
-			System.out.println("[" + getAID().getLocalName() + "]: Got " + responses.size() + " responses!");
+			System.out.println("[" + myAgent.getLocalName() + "]: Got " + responses.size() + " responses!");
 			
 			for (Integer i = 0; i < responses.size(); i++) {
 				
@@ -81,7 +107,10 @@ public class SinalphaClient extends Client {
 				else
 					msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
 				
+				System.out.println("[" + getAID().getLocalName() + "]: Sending response to " + response.getSender().getLocalName());
+				
 				acceptances.add(msg);
+				
 			}
 		}
 	}
