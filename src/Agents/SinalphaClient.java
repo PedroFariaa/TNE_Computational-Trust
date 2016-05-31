@@ -6,7 +6,7 @@ import java.util.Vector;
 import java.util.function.Supplier;
 
 import Agents.Client;
-
+import Utils.Constants;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -15,7 +15,7 @@ import jade.proto.ContractNetInitiator;;
 
 public class SinalphaClient extends Client {
 
-	public Double min_accept_trust = 0.7;
+	public Double min_accept_trust = Constants.MIN_ACCEPT_TRUST;
 	
 	public void setup() {
 		
