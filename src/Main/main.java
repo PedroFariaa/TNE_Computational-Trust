@@ -1,7 +1,9 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import Agents.BenevolentClientAgent;
 import Agents.SupplierAgent;
@@ -47,9 +49,9 @@ public class main {
 			supplier.start();
 		}
 
-		Object[] agentArgs2 = new Object[0];
+		Object[] agentsArgs2 = new Object[0];
 		for (int i = 0; i < c.getClients_number(); i++) {
-			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.ClientAgent", agentArgs2);
+			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.BenevolentClientAgent", agentsArgs2);
 			client.start();
 		}		
 

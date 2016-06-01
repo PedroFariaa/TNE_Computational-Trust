@@ -33,9 +33,8 @@ public class BenevolentClientAgent extends Client {
 	 */
 	public void setup() {
 		
-		Object [] args = getArguments();
-		
-		min_accept_trust = Double.parseDouble((String)args[0]);
+		Random r = new Random();		
+		min_accept_trust = r.nextDouble();
 		
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
 		
@@ -332,66 +331,74 @@ public class BenevolentClientAgent extends Client {
 		 */
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			
-			//System.out.println("[" + myAgent.getLocalName() + "]: Got " + responses.size() + " responses!");
-			
-			for (int i = 0; i < responses.size(); i++) {
+			for (Integer i = 0; i < responses.size(); i++) {
 				
 				ACLMessage response = (ACLMessage)responses.get(i);
 				ACLMessage msg = response.createReply();
 				
-				List<String> past_exps_sup;
+				Double trust = Double.parseDouble(response.getContent());
+				
 				String supplier = response.getSender().getLocalName();
 				
-				if(past_experiences.get(response.getSender().getLocalName()) == null)
-					past_exps_sup = new ArrayList<String>();
-				else
-					past_exps_sup = past_experiences.get(supplier);
+				if(X.get(supplier) != null) {
 					
-				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-				
-				acceptances.add(msg);
-				 // change for "F" or "Fd" or "V"
-				
-				/*if(X.get(supplier) != null) {
-					
-					if(X.get(supplier).size() >= 1) {
+					if(X.get(supplier).size() >= 2) {
 						
-						if(Double.parseDouble(response.getContent()) >= min_accept_trust) {
+						if(trust >= min_accept_trust) {
 							
 							msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-							past_exps_sup.add("F");
 							acceptances.add(msg);
 							
-						} else {
-							
-							past_exps_sup.add("V");
-							msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
-							
 						}
+						else
+							msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
 						
-						past_experiences.put(supplier, past_exps_sup);
-						
-						cumValAgreem(past_exps_sup, supplier);
-						
-						System.out.println("[" + myAgent.getLocalName() + "]: Benevolence to supplier " + supplier + " = " + getBenevolence(supplier));
 					}
 					
-				} */
+				} else {
+					
+					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					acceptances.add(msg);
+					
+				}
+					
 				
 			}
 		}
 		
+		/**
+		 * Handles all the result notifications.
+		 * @param notifications - Notifications.
+		 */
 		protected void handleAllResultNotifications(Vector notifications) {
 			
-			System.out.println("I'm HERE!!");
-			
-			/*for(Integer i = 0; i < notifications.size(); i++) {
+			for(Integer i = 0; i < notifications.size(); i++) {
 				
 				ACLMessage msg = (ACLMessage)notifications.get(i);
 				
-				System.out.println("NOTIF: "+  msg);
+				String experience = msg.getContent();
+				String supplier = msg.getSender().getLocalName();
 				
-			}*/
+				List<String> past_exps_sup;
+				
+				if(past_experiences.get(supplier) == null)
+					past_exps_sup = new ArrayList<String>();
+				else
+					past_exps_sup = past_experiences.get(supplier);
+				
+				past_exps_sup.add(experience);
+				past_experiences.put(supplier, past_exps_sup);
+				
+				cumValAgreem(past_exps_sup, supplier);
+				
+				if(X.get(supplier).size() >= 1) {
+					
+					Double benevolence = getBenevolence(supplier);
+					System.out.println("[" + myAgent.getLocalName() + "]: Benevolence = " + benevolence);
+					
+				}
+				
+			}
 			
 		}
 	}
