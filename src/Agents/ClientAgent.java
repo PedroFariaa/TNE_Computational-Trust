@@ -27,7 +27,6 @@ public class ClientAgent extends Client {
 	public void setup() {
 
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
-
 	}
 
 	class FIPAContractNetInit extends ContractNetInitiator {
@@ -103,31 +102,36 @@ public class ClientAgent extends Client {
 
 			// System.out.println("[" + myAgent.getLocalName() + "]: Got " +
 			// responses.size() + " responses!");
+			int acept = 0;
 
 			for (int i = 0; i < responses.size(); i++) {
 
 				ACLMessage response = (ACLMessage) responses.get(i);
 				ACLMessage msg = response.createReply();
 
-				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-
-				acceptances.add(msg);
+				double trust = Double.parseDouble(response.getContent());
+				if (trust >= min_accept_trust) {
+					acept++;
+					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					acceptances.add(msg);
+				} else
+					msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
 
 			}
+
+			if (acept == 0) {
+				for (int i = 0; i < responses.size() / 2; i++) {
+					Random rand = new Random();
+					Integer r = rand.nextInt(responses.size());
+
+					ACLMessage response = (ACLMessage) responses.get(r);
+					ACLMessage msg = response.createReply();
+
+					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					acceptances.add(msg);
+				}
+			}
 		}
-		/*
-		 * protected void handleAllResultNotifications(Vector notifications) {
-		 * 
-		 * for(Integer i = 0; i < notifications.size(); i++) {
-		 * 
-		 * ACLMessage msg = (ACLMessage)notifications.get(i);
-		 * 
-		 * System.out.println("NOTIF: "+ msg);
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
 	}
 
 }
