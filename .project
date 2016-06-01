@@ -14,4 +14,41 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>.classpath</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/.classpath</locationURI>
+		</link>
+		<link>
+			<name>.gitignore</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/.gitignore</locationURI>
+		</link>
+		<link>
+			<name>.project</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/.project</locationURI>
+		</link>
+		<link>
+			<name>.settings</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/.settings</locationURI>
+		</link>
+		<link>
+			<name>README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/README.md</locationURI>
+		</link>
+		<link>
+			<name>bin</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/bin</locationURI>
+		</link>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Documents/GitHub/TNE_Computational-Trust/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

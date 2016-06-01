@@ -49,14 +49,16 @@ public class SinalphaClient extends Client {
 		 * @return Returns the vector with all the call for proposals to be sent.
 		 */
 		protected Vector prepareCfps(ACLMessage cfp) {
-			
+			Constants c = new Constants();
+			int sup = c.getSup_number();
 			Vector v = new Vector();
-			cfp.addReceiver(new AID("supplier1", false));
-			
+			for (int i = 0; i < sup; i++) {
+				cfp.addReceiver(new AID("sup"+i, false));
+			}
 			String message = cfpContent();
 			cfp.setContent(message);
 
-			System.out.println("[" + myAgent.getLocalName() + "]: " + "Sending CFP to supplier 1");
+			System.out.println("[" + myAgent.getLocalName() + "]: " + "Sending CFP to all suppliers");
 
 			v.add(cfp);
 
@@ -73,8 +75,8 @@ public class SinalphaClient extends Client {
 			String message = "";
 			
 			Random rand = new Random();
-			Integer r = rand.nextInt(3);
 			
+			Integer r = rand.nextInt(3);
 			message = message + product.get(r);
 			r = rand.nextInt(3);
 			message = message + ", " + quantity.get(r);
@@ -82,7 +84,7 @@ public class SinalphaClient extends Client {
 			message = message + ", " + quality.get(r);
 			r = rand.nextInt(3);
 			message = message + ", " + delivery.get(r);
-
+			System.out.println("cfp message: " + message);
 			return message;
 		}
 
@@ -93,25 +95,21 @@ public class SinalphaClient extends Client {
 			
 			System.out.println("[" + myAgent.getLocalName() + "]: Got " + responses.size() + " responses!");
 			
-			for (Integer i = 0; i < responses.size(); i++) {
+			for (int i = 0; i < responses.size(); i++) {
 				
 				ACLMessage response = (ACLMessage)responses.get(i);
 				ACLMessage msg = response.createReply();
 				
-				Double trust = Double.parseDouble(response.getContent());
-				
 				System.out.println("[" + getAID().getLocalName() + "]: Received message from " + response.getSender().getLocalName());
 				
-				if(trust >= min_accept_trust)
-					msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-				else
-					msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
+				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 				
 				System.out.println("[" + getAID().getLocalName() + "]: Sending response to " + response.getSender().getLocalName());
 				
 				acceptances.add(msg);
 				
 			}
+			System.out.println("DEALT WITH ALL RESPONSES");
 		}
 	}
 
