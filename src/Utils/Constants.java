@@ -17,7 +17,7 @@ public class Constants {
 	public static void setSup_number(int sup_number) {
 		Constants.sup_number = sup_number;
 	}
-	public static int sup_number = 2;
+	public static int sup_number = 3;
 	
 	
 }

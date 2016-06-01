@@ -13,7 +13,7 @@ import jade.proto.ContractNetResponder;
 public class SupplierAgent extends Agent {
 
 	Double w = Math.PI / 18;
-	Double lambda_F = 1.0;
+	Double lambda_F = 0.7;
 	Double lambda_Fd = -0.1;
 	Double lambda_V = -1.5;
 	int dec = 0;
@@ -173,7 +173,7 @@ public class SupplierAgent extends Agent {
 			// envia mensagem para cliente - acho que nao vai ser necessario
 			ACLMessage result = accept.createReply();
 			result.setPerformative(ACLMessage.INFORM);
-			result.setContent("this is the result");
+			result.setContent(res);
 			
 			return result;
 
@@ -186,30 +186,30 @@ public class SupplierAgent extends Agent {
 			int val = r / 100;
 
 			if (!hasHandicap) {
-				if (val <= trust * (2 / 3) + 0.2){
+				if (val <= trust * (2 / 5)){
 					dec = 0;
-					res = "Fulfilled";
+					res = "F";
 				}
-				else if (val <= ((trust * (2 / 3) + 0.2) + (1 - (trust * (2 / 3) + 0.2)) * 0.6)){
+				else if (val <= ((trust * (2 / 5)) + (1 - (trust * (2 / 5))) * 0.6)){
 					dec = 1;
-					res = "Fulfilled with delay";
+					res = "Fd";
 				}
 				else{
 					dec = 2;
-					res = "Not fulfilled";
+					res = "V";
 				}
 			}else{
-				if (val <= trust * (2 / 3) - 0.1){
+				if (val <= trust * (2 / 5) - 0.1){
 					dec = 0;
-					res = "Fulfilled";
+					res = "F";
 				}
-				else if (val <= ((trust * (2 / 3) - 0.1) + (1 - (trust * (2 / 3) - 0.1)) * 0.7)){
+				else if (val <= ((trust * (2 / 5) - 0.1) + (1 - (trust * (2 / 5) - 0.1)) * 0.7)){
 					dec = 1;
-					res = "Fulfilled with delay";
+					res = "Fd";
 				}
 				else{
 					dec = 2;
-					res = "Not fulfilled";
+					res = "V";
 				}
 			}
 		}
