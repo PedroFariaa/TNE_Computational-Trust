@@ -73,7 +73,7 @@ public class SinalphaClient extends Client {
 		/**
 		 * Adds the cumulative value at experience i (1, 2, 3, ..., N) in Y and adds the experience i in X
 		 * 
-		 * VERY IMPORTANT NOTE: See page 116 and 117!!!
+		 * VERY IMPORTANT NOTE: See page 116 and 117!
 		 *  
 		 * @param exps - List of experiences with a certain supplier.
 		 * @param supplier - Supplier name.
@@ -197,7 +197,7 @@ public class SinalphaClient extends Client {
 			int sup = c.getSup_number();
 			Vector v = new Vector();
 			for (int i = 0; i < sup; i++) {
-				cfp.addReceiver(new AID("sup"+i, true));
+				cfp.addReceiver(new AID("sup"+i, false));
 			}
 			String message = cfpContent();
 			cfp.setContent(message);
@@ -291,13 +291,48 @@ public class SinalphaClient extends Client {
 			System.out.println("cfp message: " + message);
 			return message;
 		}
+		
+		/**
+		 * Gets the correlation coefficient.
+		 * @param supplier - Supplier name.
+		 * @return Returns the correlation coefficient.
+		 */
+		private Double getCoefficient(String supplier) {
+			
+			List<Double> betas0 = Beta0.get(supplier);
+			List<Double> betas1 = Beta1.get(supplier);
+			
+			Double last_beta0 = betas0.get(betas0.size() - 1);
+			Double last_beta1 = betas1.get(betas1.size() - 1);
+			
+			return last_beta1 + 0.1*last_beta0;
+			
+		}
+		
+		/**
+		 * Gets the benevolence for a certain supplier.
+		 * @param supplier - Supplier name.
+		 * @return Returns the benevolence.
+		 */
+		private Double getBenevolence(String supplier) {
+			
+			Double coefficient = getCoefficient(supplier);
+			Integer num_experiences = X.get(supplier).size();
+			List<Double> cumulatives = Y.get(supplier);
+			Double cumulative = cumulatives.get(cumulatives.size() - 1);
+			
+			Double benevolence = 0.5 * coefficient + 0.5 * (cumulative / num_experiences);
+			
+			return benevolence;
+			
+		}
 
 		/**
 		 * Handles all the responses and then adds the acceptances to the respective vector.
 		 */
 		protected void handleAllResponses(Vector responses, Vector acceptances) {
 			
-			System.out.println("[" + myAgent.getLocalName() + "]: Got " + responses.size() + " responses!");
+			//System.out.println("[" + myAgent.getLocalName() + "]: Got " + responses.size() + " responses!");
 			
 			for (int i = 0; i < responses.size(); i++) {
 				
@@ -319,6 +354,13 @@ public class SinalphaClient extends Client {
 				past_experiences.put(response.getSender().getLocalName(), past_exps_sup);
 				
 				cumValAgreem(past_exps_sup, supplier);
+				
+				if(X.get(supplier) != null) {
+					
+					if(X.get(supplier).size() >= 2)
+						System.out.println("[" + myAgent.getLocalName() + "]: Benevolence to supplier " + response.getSender().getLocalName() + " = " + getBenevolence(supplier));
+					
+				} 
 				
 				acceptances.add(msg);
 				
