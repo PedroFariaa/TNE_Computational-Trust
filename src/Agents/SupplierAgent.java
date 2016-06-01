@@ -12,10 +12,12 @@ import jade.proto.ContractNetResponder;
 
 public class SupplierAgent extends Agent {
 
-	Double w = Math.PI / 6;
+	Double w = Math.PI / 18;
 	Double lambda_F = 1.0;
 	Double lambda_Fd = -0.1;
 	Double lambda_V = -1.5;
+	int dec = 0;
+	String res = "";
 
 	List<String> product = Arrays.asList("cotton", "chiffon", "voile");
 	List<String> quantity = Arrays.asList("small", "medium", "large");
@@ -150,24 +152,32 @@ public class SupplierAgent extends Agent {
 			System.out.println(myAgent.getLocalName() + " got an accept!");
 
 			// decidir envio F, Fd ou V
-			int dec = 0;
-			String res = "";
-			setResult(dec, res);
+			setResult();
 
 			// atualiza valor de trust - SINALPHA
+			System.out.println(">>>>>>>>>>> " + dec);
 			double old_trust = trust;
-			trust = trust + lambda_F * w;
+			if (dec == 0)
+				trust = trust + lambda_F * w;
+			if (dec == 1)
+				trust = trust + lambda_Fd * w;
+			if (dec == 2)
+				trust = trust + lambda_V * w;
+			
+			if(trust > 1)
+				trust = (double) 1;
+			if(trust < 0)
+				trust = (double) 0;
 			System.out.println("trust atualizada de:" + old_trust + "para " + trust);
 			// envia mensagem para cliente - acho que nao vai ser necessario
 			ACLMessage result = accept.createReply();
 			result.setPerformative(ACLMessage.INFORM);
 			result.setContent(res);
-			System.out.println(res);
 			return result;
 
 		}
 
-		private void setResult(int dec, String result) {
+		private void setResult() {
 			// F - 0; Fd - 1; V - 2
 			Random rand = new Random();
 			Integer r = rand.nextInt(101);
@@ -176,28 +186,28 @@ public class SupplierAgent extends Agent {
 			if (!hasHandicap) {
 				if (val <= trust * (2 / 3) + 0.2){
 					dec = 0;
-					result = "Fullfilled";
+					res = "Fullfilled";
 				}
 				else if (val <= ((trust * (2 / 3) + 0.2) + (1 - (trust * (2 / 3) + 0.2)) * 0.6)){
 					dec = 1;
-					result = "Fullfilled with delay";
+					res = "Fullfilled with delay";
 				}
 				else{
 					dec = 2;
-					result = "Not fullfilled";
+					res = "Not fullfilled";
 				}
 			}else{
 				if (val <= trust * (2 / 3) - 0.1){
 					dec = 0;
-					result = "Fullfilled";
+					res = "Fullfilled";
 				}
 				else if (val <= ((trust * (2 / 3) - 0.1) + (1 - (trust * (2 / 3) - 0.1)) * 0.7)){
 					dec = 1;
-					result = "Fullfilled with delay";
+					res = "Fullfilled with delay";
 				}
 				else{
 					dec = 2;
-					result = "Not fullfilled";
+					res = "Not fullfilled";
 				}
 			}
 		}

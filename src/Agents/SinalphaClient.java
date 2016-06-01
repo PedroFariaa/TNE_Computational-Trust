@@ -109,7 +109,6 @@ public class SinalphaClient extends Client {
 				acceptances.add(msg);
 				
 			}
-			System.out.println("DEALT WITH ALL RESPONSES");
 		}
 	}
 
