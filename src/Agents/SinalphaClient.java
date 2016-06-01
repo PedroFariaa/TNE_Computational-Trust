@@ -14,7 +14,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import jade.proto.ContractNetInitiator;;
+import jade.proto.ContractNetInitiator;
 
 public class SinalphaClient extends Client {
 
@@ -33,9 +33,9 @@ public class SinalphaClient extends Client {
 	 */
 	public void setup() {
 		
-		//Object [] args = getArguments();
+		Object [] args = getArguments();
 		
-		//min_accept_trust = Double.parseDouble((String)args[0]);
+		min_accept_trust = Double.parseDouble((String)args[0]);
 		
 		addBehaviour(new FIPAContractNetInit(this, new ACLMessage(ACLMessage.CFP)));
 		
@@ -339,32 +339,60 @@ public class SinalphaClient extends Client {
 				ACLMessage response = (ACLMessage)responses.get(i);
 				ACLMessage msg = response.createReply();
 				
-				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-				
 				List<String> past_exps_sup;
 				String supplier = response.getSender().getLocalName();
 				
 				if(past_experiences.get(response.getSender().getLocalName()) == null)
 					past_exps_sup = new ArrayList<String>();
 				else
-					past_exps_sup = past_experiences.get(response.getSender().getLocalName());
+					past_exps_sup = past_experiences.get(supplier);
 					
-				past_exps_sup.add("F"); // change for "F" or "Fd" or "V"
-				
-				past_experiences.put(response.getSender().getLocalName(), past_exps_sup);
-				
-				cumValAgreem(past_exps_sup, supplier);
-				
-				if(X.get(supplier) != null) {
-					
-					if(X.get(supplier).size() >= 2)
-						System.out.println("[" + myAgent.getLocalName() + "]: Benevolence to supplier " + response.getSender().getLocalName() + " = " + getBenevolence(supplier));
-					
-				} 
+				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 				
 				acceptances.add(msg);
+				 // change for "F" or "Fd" or "V"
+				
+				/*if(X.get(supplier) != null) {
+					
+					if(X.get(supplier).size() >= 1) {
+						
+						if(Double.parseDouble(response.getContent()) >= min_accept_trust) {
+							
+							msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+							past_exps_sup.add("F");
+							acceptances.add(msg);
+							
+						} else {
+							
+							past_exps_sup.add("V");
+							msg.setPerformative(ACLMessage.REJECT_PROPOSAL);
+							
+						}
+						
+						past_experiences.put(supplier, past_exps_sup);
+						
+						cumValAgreem(past_exps_sup, supplier);
+						
+						System.out.println("[" + myAgent.getLocalName() + "]: Benevolence to supplier " + supplier + " = " + getBenevolence(supplier));
+					}
+					
+				} */
 				
 			}
+		}
+		
+		protected void handleAllResultNotifications(Vector notifications) {
+			
+			System.out.println("I'm HERE!!");
+			
+			/*for(Integer i = 0; i < notifications.size(); i++) {
+				
+				ACLMessage msg = (ACLMessage)notifications.get(i);
+				
+				System.out.println("NOTIF: "+  msg);
+				
+			}*/
+			
 		}
 	}
 
