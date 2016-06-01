@@ -176,7 +176,7 @@ public class SupplierAgent extends Agent {
 			return result;
 
 		}
-
+		
 		private void setResult() {
 			// F - 0; Fd - 1; V - 2
 			Random rand = new Random();
@@ -186,28 +186,28 @@ public class SupplierAgent extends Agent {
 			if (!hasHandicap) {
 				if (val <= trust * (2 / 3) + 0.2){
 					dec = 0;
-					res = "Fullfilled";
+					res = "Fulfilled";
 				}
 				else if (val <= ((trust * (2 / 3) + 0.2) + (1 - (trust * (2 / 3) + 0.2)) * 0.6)){
 					dec = 1;
-					res = "Fullfilled with delay";
+					res = "Fulfilled with delay";
 				}
 				else{
 					dec = 2;
-					res = "Not fullfilled";
+					res = "Not fulfilled";
 				}
 			}else{
 				if (val <= trust * (2 / 3) - 0.1){
 					dec = 0;
-					res = "Fullfilled";
+					res = "Fulfilled";
 				}
 				else if (val <= ((trust * (2 / 3) - 0.1) + (1 - (trust * (2 / 3) - 0.1)) * 0.7)){
 					dec = 1;
-					res = "Fullfilled with delay";
+					res = "Fulfilled with delay";
 				}
 				else{
 					dec = 2;
-					res = "Not fullfilled";
+					res = "Not fulfilled";
 				}
 			}
 		}
