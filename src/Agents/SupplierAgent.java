@@ -149,15 +149,15 @@ public class SupplierAgent extends Agent {
 		 */
 		protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {
 
-			//System.out.println(myAgent.getLocalName() + " got an accept!");
+			System.out.println(myAgent.getLocalName() + " got an accept!");
 
 			// decidir envio F, Fd ou V
-			//setResult();
+			setResult();
 
 			// atualiza valor de trust - SINALPHA
 			//System.out.println(">>>>>>>>>>> " + dec);
-			//double old_trust = trust;
-			/*if (dec == 0)
+			double old_trust = trust;
+			if (dec == 0)
 				trust = trust + lambda_F * w;
 			if (dec == 1)
 				trust = trust + lambda_Fd * w;
@@ -168,7 +168,7 @@ public class SupplierAgent extends Agent {
 				trust = (double) 1;
 			if(trust < 0)
 				trust = (double) 0;
-			System.out.println("[" + myAgent.getLocalName() + "]: " + "Updated trust from " + old_trust + " to " + trust);*/
+			System.out.println("[" + myAgent.getLocalName() + "]: " + "Updated trust from " + old_trust + " to " + trust);
 			
 			// envia mensagem para cliente - acho que nao vai ser necessario
 			ACLMessage result = accept.createReply();

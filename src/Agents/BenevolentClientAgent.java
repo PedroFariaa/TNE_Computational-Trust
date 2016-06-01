@@ -16,7 +16,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
-public class SinalphaClient extends Client {
+public class BenevolentClientAgent extends Client {
 
 	public Double min_accept_trust = Constants.MIN_ACCEPT_TRUST;
 	public Double exp_number = 0.0;

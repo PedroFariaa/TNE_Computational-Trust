@@ -3,8 +3,9 @@ package Main;
 import java.util.ArrayList;
 import java.util.List;
 
-import Agents.SinalphaClient;
+import Agents.BenevolentClientAgent;
 import Agents.SupplierAgent;
+import Agents.ClientAgent;
 import Utils.Constants;
 import jade.BootProfileImpl;
 import jade.core.ProfileImpl;
@@ -39,17 +40,19 @@ public class main {
 		rma.start();
 		*/
 		// creating agents
+		Object[] agentArgs = new Object[0];
 		for (int i = 0; i < c.getSup_number(); i++) {
-			AgentController supplier = mainContainer.createNewAgent("client" + i, "Agents.SupplierAgent",
-					null);
+			AgentController supplier = mainContainer.createNewAgent("sup" + i, "Agents.SupplierAgent",
+					agentArgs);
 			supplier.start();
 		}
+
+		Object[] agentArgs2 = new Object[0];
 		for (int i = 0; i < c.getClients_number(); i++) {
-			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.SinalphaClient", null);
+			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.ClientAgent", agentArgs2);
 			client.start();
 		}		
 
-		// new Thread(new TestbedViewer()).start();
 	}
 
 	public static ContainerController getContainer() {
