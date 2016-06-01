@@ -108,7 +108,10 @@ public class ClientAgent extends Client {
 
 				ACLMessage response = (ACLMessage) responses.get(i);
 				ACLMessage msg = response.createReply();
-
+/*
+				msg.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+				acceptances.add(msg);*/
+				
 				double trust = Double.parseDouble(response.getContent());
 				if (trust >= min_accept_trust) {
 					acept++;

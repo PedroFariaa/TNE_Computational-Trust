@@ -14,7 +14,7 @@ public class SupplierAgent extends Agent {
 
 	Double w = Math.PI / 18;
 	Double lambda_F = 0.7;
-	Double lambda_Fd = -0.1;
+	Double lambda_Fd = -0.3;
 	Double lambda_V = -1.5;
 	int dec = 0;
 	String res = "";
@@ -157,12 +157,16 @@ public class SupplierAgent extends Agent {
 			// atualiza valor de trust - SINALPHA
 			//System.out.println(">>>>>>>>>>> " + dec);
 			double old_trust = trust;
-			if (dec == 0)
+			if (dec == 0){
 				trust = trust + lambda_F * w;
-			if (dec == 1)
+				System.out.println("fulfilled");
+			}else if (dec == 1){
 				trust = trust + lambda_Fd * w;
-			if (dec == 2)
+				System.out.println("fulfilled with delay");
+			}else{
 				trust = trust + lambda_V * w;
+				System.out.println("not fulfilled");
+			}
 			
 			if(trust > 1)
 				trust = (double) 1;

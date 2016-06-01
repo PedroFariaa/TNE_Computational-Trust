@@ -51,7 +51,7 @@ public class main {
 
 		Object[] agentsArgs2 = new Object[0];
 		for (int i = 0; i < c.getClients_number(); i++) {
-			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.ClientAgent", agentsArgs2);
+			AgentController client = mainContainer.createNewAgent("client" + i, "Agents.BenevolentClientAgent", agentsArgs2);
 			client.start();
 		}		
 

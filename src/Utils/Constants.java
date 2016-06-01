@@ -2,7 +2,7 @@ package Utils;
 
 public class Constants {
 
-	public static Double MIN_ACCEPT_TRUST = 0.7;
+	public static Double MIN_ACCEPT_TRUST = 0.4;
 	
 	public static int clients_number = 6;
 	public static int getClients_number() {
@@ -17,7 +17,7 @@ public class Constants {
 	public static void setSup_number(int sup_number) {
 		Constants.sup_number = sup_number;
 	}
-	public static int sup_number = 2;
+	public static int sup_number = 8;
 	
 	
 }
