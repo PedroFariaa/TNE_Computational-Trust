@@ -376,7 +376,9 @@ public class BenevolentClientAgent extends Client {
 				
 				ACLMessage msg = (ACLMessage)notifications.get(i);
 				
-				String experience = msg.getContent();
+				String [] params = msg.getContent().split(", ");
+				String experience = params[0];
+				Double trust = Double.parseDouble(params[1]);
 				String supplier = msg.getSender().getLocalName();
 				
 				List<String> past_exps_sup;
@@ -394,7 +396,7 @@ public class BenevolentClientAgent extends Client {
 				if(X.get(supplier).size() >= 1) {
 					
 					Double benevolence = getBenevolence(supplier);
-					System.out.println("[" + myAgent.getLocalName() + "]: Benevolence = " + benevolence);
+					System.out.println("[" + myAgent.getLocalName() + "]: Benevolence of " + supplier + " = " + benevolence*trust);
 					
 				}
 				

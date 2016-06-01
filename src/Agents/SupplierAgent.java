@@ -173,7 +173,7 @@ public class SupplierAgent extends Agent {
 			// envia mensagem para cliente - acho que nao vai ser necessario
 			ACLMessage result = accept.createReply();
 			result.setPerformative(ACLMessage.INFORM);
-			result.setContent(res);
+			result.setContent(res + ", " + trust);
 			
 			return result;
 
